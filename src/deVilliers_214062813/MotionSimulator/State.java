@@ -11,4 +11,16 @@ public class State
         this.y = y;
         this.a = a;
     }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getA() {
+        return a;
+    }
 }

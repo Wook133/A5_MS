@@ -22,14 +22,33 @@ public class VisualFrame extends Frame implements Runnable, WindowListener {
     int pointer = 0;
     ArrayList<State> path;
 
+    int xstart, xend, ystart, yend;
+
+
     public VisualFrame(ArrayList<State> path) {
         this.path = path;
         this.addWindowListener(this);
-        this.setBounds(50, 50, 700, 700);
+        this.setBounds(375, 250, 750, 500);
+        //this.setBounds(50, 50, 700, 700);
         //this.setBounds(50, 50, 276, 184);
         this.setVisible(true);
         this.t = new Thread(this);
         this.t.start();
+    }
+
+    public VisualFrame(ArrayList<State> path, int xstart, int ystart, int xend, int yend) {
+        this.path = path;
+        this.addWindowListener(this);
+        this.setBounds(50, 50, 750, 500);
+        //this.setBounds(50, 50, 700, 700);
+        //this.setBounds(50, 50, 276, 184);
+        this.setVisible(true);
+        this.t = new Thread(this);
+        this.t.start();
+        this.xstart = xstart;
+        this.xend = xend;
+        this.ystart = ystart;
+        this.yend = yend;
     }
 
     public void run() {

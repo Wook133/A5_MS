@@ -8,4 +8,12 @@ public class TimedCommand {
         this.c = c;
         this.time = time;
     }
+
+    public Command getC() {
+        return c;
+    }
+
+    public int getTime() {
+        return time;
+    }
 }
