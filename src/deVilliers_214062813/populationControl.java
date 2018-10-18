@@ -138,9 +138,9 @@ public class populationControl {
                 if (i >= B.listChromosomes.size())
                 {
                     TimedCommand tc = randomTimedCommand();
-                    int left = (int) (tc.getC().getLeft() * r.NormalRandomNumber(1.0));
-                    int right = (int) (tc.getC().getRight() * r.NormalRandomNumber(1.0));
-                    int t = (int) (tc.getTime() * r.NormalRandomNumber(1.0));
+                    int left = (int) (tc.getC().getLeft() * r.NormalRandomNumber(3.0));
+                    int right = (int) (tc.getC().getRight() * r.NormalRandomNumber(3.0));
+                    int t = (int) (tc.getTime() * r.NormalRandomNumber(2.0));
                     TimedCommand mutatedTC = new TimedCommand(new Command(left, right), t);
                     temp.setCommand(i, mutatedTC);
                 }
@@ -148,17 +148,17 @@ public class populationControl {
                 {
                     int pos = r.UniformPositiveRandomInteger((A.getListChromosomes().size() - 1)*1.0);
                     //TimedCommand tc = randomTimedCommand();
-                    int left = (int) (B.getListChromosomes().get(i).getC().getLeft() * r.NormalRandomNumber(1.0)) + A.getListChromosomes().get(pos).getC().getLeft();
-                    int right = (int) (B.getListChromosomes().get(i).getC().getRight() * r.NormalRandomNumber(1.0)) + A.getListChromosomes().get(pos).getC().getRight();
-                    int t = (int) (B.getListChromosomes().get(i).getTime() * r.NormalRandomNumber(1.0)) + (A.getListChromosomes().get(pos).getTime());
+                    int left = (int) (B.getListChromosomes().get(i).getC().getLeft() * r.NormalRandomNumber(3.0)) + A.getListChromosomes().get(pos).getC().getLeft();
+                    int right = (int) (B.getListChromosomes().get(i).getC().getRight() * r.NormalRandomNumber(3.0)) + A.getListChromosomes().get(pos).getC().getRight();
+                    int t = (int) (B.getListChromosomes().get(i).getTime() * r.NormalRandomNumber(2.0)) + (A.getListChromosomes().get(pos).getTime());
                     TimedCommand mutatedTC = new TimedCommand(new Command(left, right), t);
                     temp.setCommand(i, mutatedTC);
                 }
                 else
                 {
-                    int left = (int) (B.getListChromosomes().get(i).getC().getLeft() * r.NormalRandomNumber(1.0)) + A.getListChromosomes().get(i).getC().getLeft();
-                    int right = (int) (B.getListChromosomes().get(i).getC().getRight() * r.NormalRandomNumber(1.0)) + A.getListChromosomes().get(i).getC().getRight();
-                    int t = (int) (B.getListChromosomes().get(i).getTime() * r.NormalRandomNumber(1.0)) + (A.getListChromosomes().get(i).getTime());
+                    int left = (int) (B.getListChromosomes().get(i).getC().getLeft() * r.NormalRandomNumber(3.0)) + A.getListChromosomes().get(i).getC().getLeft();
+                    int right = (int) (B.getListChromosomes().get(i).getC().getRight() * r.NormalRandomNumber(3.0)) + A.getListChromosomes().get(i).getC().getRight();
+                    int t = (int) (B.getListChromosomes().get(i).getTime() * r.NormalRandomNumber(2.0)) + (A.getListChromosomes().get(i).getTime());
                     TimedCommand mutatedTC = new TimedCommand(new Command(left, right), t);
                     temp.setCommand(i, mutatedTC);
                 }

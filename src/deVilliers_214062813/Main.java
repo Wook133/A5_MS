@@ -40,7 +40,7 @@ public class Main {
             System.out.println(s.getX() + "; " + s.getY() + "; " +s.getA());
         }**/
        //    public populationControl(Double crossoverRate, Double mutationRate, Double growthMutation, Double shrinkMutation, Double swapMutation, Double replaceMutation, Double parameterMutation, Integer populationSize, Integer generations, Integer dimensions, Double xstart, Double xend, Double ystart, Double yend, Double angle) {
-       populationControl pc = new populationControl (0.5, 0.2, 0.1, 0.1, 0.1, 0.0, 0.0, 1000, 10, -50.0, 0.0, 0.0, 0.0, 270.0);
+       populationControl pc = new populationControl (0.5, 0.6, 0.30, 0.2, 0.2, 0.10, 0.10, 1000, 1000, -50.0, 0.0, 0.0, 0.0, 270.0);
        pc.InitializePopulation();
        pc.Evolve();
        //pc.visualTest();
