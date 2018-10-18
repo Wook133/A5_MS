@@ -1,8 +1,8 @@
 package deVilliers_214062813.MotionSimulator;
 
 public class Command {
-    int left;
-    int right;
+    public int left;
+    public int right;
 
     public Command(int left, int right) {
         this.left = left;

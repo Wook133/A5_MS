@@ -7,6 +7,7 @@ import org.apache.commons.math3.util.Pair;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Random;
 import java.util.concurrent.atomic.DoubleAccumulator;
 
 public class populationControl {
@@ -203,7 +204,115 @@ public class populationControl {
         return pcur;
     }
 
+    public Triple<Agent, ArrayList<State>, ArrayList<Double>> createNewAgent(Agent A, Agent B, ArrayList<Double> fB) {
+        Randomness r = new Randomness();
+        Agent temp = new Agent();
+        Boolean a = false;
+        if (A.listChromosomes.size() > B.listChromosomes.size())
+        {
+            temp.setListChromosomes(A.listChromosomes);
+            a = true;
+        }
+        else
+        {
+            temp.setListChromosomes(B.listChromosomes);
+            a = false;
+        }
+
+        for (int i = 0; i <= temp.listChromosomes.size() - 1; i++) {
+            Double curCR = r.UniformPositiveRandomNumber(1.0);
+            Double curMR = r.UniformPositiveRandomNumber(1.0);
+            if (curCR >= crossoverRate)
+            {
+                if (a == false)
+                {
+                    if (i < B.listChromosomes.size()) {
+                        TimedCommand tc = B.listChromosomes.get(i);
+                        if (curMR >= MutationRate) {
+                            int left = tc.getC().getLeft() + r.UniformRandomInteger(10.0);
+                            int right = tc.getC().getRight() + r.UniformRandomInteger(10.0);
+                            int time = tc.getTime() + r.UniformRandomInteger(10.0);
+                            tc = new TimedCommand(new Command(left, right), time);
+                        }
+                        temp.setCommand(i, tc);
+                    }
+                    else
+                    {
+                        Random ra = new Random();
+                        TimedCommand tc = A.listChromosomes.get(ra.nextInt(A.listChromosomes.size() - 1));
+                        if (curMR >= MutationRate) {
+                            int left = r.UniformRandomInteger(700.0);
+                            int right = r.UniformRandomInteger(700.0);
+                            int time = (int)(r.UniformPositiveRandomNumber(10.0) -1.0);
+                            tc = new TimedCommand(new Command(left, right), time);
+                        }
+                        temp.setCommand(i, tc);
+                    }
+                }
+                else
+                {
+                    if (i < A.listChromosomes.size())
+                    {
+                        TimedCommand tc = A.listChromosomes.get(i);
+                        if (curMR >= MutationRate) {
+                            int left = tc.getC().getLeft() +  r.UniformRandomInteger(10.0);
+                            int right = tc.getC().getRight()+  r.UniformRandomInteger(10.0);
+                            int time = tc.getTime()+  r.UniformRandomInteger(10.0);
+                            tc = new TimedCommand(new Command(left, right), time);
+                        }
+                        temp.setCommand(i, tc);
+                    }
+                    else
+                    {
+                        Random ra = new Random();
+                        TimedCommand tc = A.listChromosomes.get(ra.nextInt(A.listChromosomes.size() - 1));
+                        if (curMR >= MutationRate) {
+                            int left = r.UniformRandomInteger(700.0);
+                            int right = r.UniformRandomInteger(700.0);
+                            int time = (int)(r.UniformPositiveRandomNumber(10.0) -1.0);
+                            tc = new TimedCommand(new Command(left, right), time);
+                        }
+                        temp.setCommand(i, tc);
+                    }
+                }
+            }
+
+        }
+        MotionSimulator ms = new MotionSimulator();
+        ArrayList<State> tempStates = new ArrayList<>();
+        tempStates = ms.getPath(new State(xstart,ystart, angle), temp.getListChromosomes());
+        ArrayList<Double> tempFitness = calcIndividualFitness(tempStates);
+        Double tf = calcTotalFitness(tempFitness);
+        temp.setTotalFitness(tf);
+        Triple<Agent, ArrayList<State>, ArrayList<Double>> pcur = Triple.of(temp, tempStates, tempFitness);
+        return pcur;
+
+    }
+
+
     public ArrayList<Triple<Agent, ArrayList<State>, ArrayList<Double>>> Breed(ArrayList<Pair<Integer, Integer>> breedingpairs)
+    {
+        ArrayList<Triple<Agent, ArrayList<State>, ArrayList<Double>>> temp = new ArrayList<>();
+        Agent c = Collections.min(population, new sortTripleGA()).getLeft();
+        MotionSimulator ms = new MotionSimulator();
+        ArrayList<State> tempStates = new ArrayList<>();
+        tempStates = ms.getPath(new State(xstart,ystart, angle), c.getListChromosomes());
+        ArrayList<Double> tempFitness = calcIndividualFitness(tempStates);
+        Double tf = calcTotalFitness(tempFitness);
+        c.setTotalFitness(tf);
+        Triple<Agent, ArrayList<State>, ArrayList<Double>> pcur = Triple.of(c, tempStates, tempFitness);
+        temp.add(pcur);
+        for (int i = 1; i <= breedingpairs.size() - 1; i++)
+        {
+            Agent A = population.get(breedingpairs.get(i).getFirst()).getLeft();
+            Agent B = population.get(breedingpairs.get(i).getSecond()).getLeft();
+            ArrayList<Double> DDD = population.get(breedingpairs.get(i).getSecond()).getRight() ;
+            Triple<Agent, ArrayList<State>, ArrayList<Double>> curChild = createNewAgent(A, B, population.get(breedingpairs.get(i).getSecond()).getRight());
+            temp.add(curChild);
+        }
+        return temp;
+    }
+    public ArrayList<Triple<Agent, ArrayList<State>, ArrayList<Double>>> BreedOther(ArrayList<Pair<Integer, Integer>> breedingpairs)
     {
         ArrayList<Triple<Agent, ArrayList<State>, ArrayList<Double>>> temp = new ArrayList<>();
         Agent c = Collections.min(population, new sortTripleGA()).getLeft();
@@ -225,7 +334,6 @@ public class populationControl {
         }
         return temp;
     }
-
     public TimedCommand randomTimedCommand()
     {
         Randomness r = new Randomness();
@@ -283,9 +391,15 @@ public class populationControl {
             ArrayList<Triple<Agent, ArrayList<State>, ArrayList<Double>>> children2 = new ArrayList<>();
             children = Breed(breeders);
             children2 = Breed(breeders);
+           /* ArrayList<Triple<Agent, ArrayList<State>, ArrayList<Double>>>children3 = new ArrayList<>();
+            ArrayList<Triple<Agent, ArrayList<State>, ArrayList<Double>>> children4 = new ArrayList<>();*/
+            children = Breed(breeders);
+            children2 = BreedOther(breeders);
             population = new ArrayList<>();
             population.addAll(children);
             population.addAll(children2);
+          /*  population.addAll(children3);
+            population.addAll(children4);*/
             //breeders = selectBest10Percent();
             //BreedToPop(breeders);
             igen = igen + 1;

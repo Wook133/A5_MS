@@ -30,6 +30,10 @@ public class Agent {
         {
             listChromosomes.set(i, tc);
         }
+        else
+        {
+            listChromosomes.add(tc);
+        }
         pruneAgent();
     }
 
@@ -76,7 +80,7 @@ public class Agent {
     public void pruneAgent()
     {
         numberSteps();
-        while (timeSteps > 100)
+        while ((timeSteps > 100) && (listChromosomes.size() > 1))
         {
             Randomness r = new Randomness();
             double size = (listChromosomes.size()*1.0) - 1.0;

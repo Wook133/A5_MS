@@ -1,8 +1,8 @@
 package deVilliers_214062813.MotionSimulator;
 
 public class TimedCommand {
-    Command c;
-    int time;
+    public Command c;
+    public int time;
 
     public TimedCommand(Command c, int time) {
         this.c = c;

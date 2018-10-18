@@ -119,6 +119,22 @@ public class Randomness {
         Integer i = (int)cur;
         return i;
     }
+    /**
+     * @param Range [-Range; Range]
+     * @return  pseudorandom number from a Uniform Distribution within the range
+     */
+    public static Integer normalRandomIntegerN(Double Range)
+    {
+        Random r = new Random();
+        double dmax =  5.539589635447753;
+        GaussianRandomGenerator rnd = new GaussianRandomGenerator(new Well19937c(r.nextInt()));
+        double cur = rnd.nextNormalizedDouble();
+        cur = (cur/dmax) * Range;
+        cur = cur - 1;
+        cur = Math.round(cur);
+        Integer i = (int)cur;
+        return i;
+    }
 
     /**
      * @return  pseudorandom number from a Normal Distribution within the range
