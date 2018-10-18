@@ -9,13 +9,31 @@ import java.util.ArrayList;
 
 public class Agent {
     ArrayList<TimedCommand> listChromosomes = new ArrayList<>();
-    ArrayList<State> listStates = new ArrayList<>();
-    double xstart, xend, ystart, yend, angle;
-
-
+    //ArrayList<State> listStates = new ArrayList<>();
     int timeSteps;
+    Double TotalFitness;
 
-    public void initialize(double x1, double y1, double x2, double y2, double a)
+    public Agent() {
+        listChromosomes = new ArrayList<>();
+        timeSteps = 0;
+        TotalFitness = 100000000.0;
+    }
+
+    public void addCommand(TimedCommand tc)
+    {
+        listChromosomes.add(tc);
+        pruneAgent();
+    }
+    public void setCommand(int i, TimedCommand tc)
+    {
+        if (i <= listChromosomes.size() - 1)
+        {
+            listChromosomes.set(i, tc);
+        }
+        pruneAgent();
+    }
+
+    public void initialize()
     {
         Randomness r = new Randomness();
         int size = r.UniformPositiveRandomNaturalNumber(100.0);
@@ -27,15 +45,21 @@ public class Agent {
             listChromosomes.add(new TimedCommand(new Command(left, right), time));
         }
         pruneAgent();
-        MotionSimulator ms = new MotionSimulator();
-        xstart = x1;
-        xend = x2;
-        ystart = y1;
-        yend = y2;
-        angle = a;
-        listStates = ms.getPath(new State(xstart, ystart, angle), listChromosomes);
+        //MotionSimulator ms = new MotionSimulator();
+       // listStates = ms.getPath(new State(xstart, ystart, angle), listChromosomes);
 
     }
+
+    public void initializeBlank()
+    {
+        listChromosomes = new ArrayList<>();
+        for (int i = 0; i <= 100; i++) {
+            listChromosomes.add(new TimedCommand(new Command(0, 0), 2));
+        }
+        pruneAgent();
+    }
+
+
 
     public void pruneAgent(int maxSize)
     {
@@ -62,6 +86,42 @@ public class Agent {
         }
     }
 
+    public ArrayList<TimedCommand> getListChromosomes() {
+        return listChromosomes;
+    }
+    public void getRemoveChromosomes(int i) {
+        if ((i >=0) && (i <= listChromosomes.size() -1))
+        {
+            listChromosomes.remove(i);
+        }
+    }
+
+    public void setListChromosomes(ArrayList<TimedCommand> listChromosomes) {
+        this.listChromosomes = listChromosomes;
+    }
+
+   /* public ArrayList<State> getListStates() {
+        return listStates;
+    }
+
+    public void setListStates(ArrayList<State> listStates) {
+        this.listStates = listStates;
+    }*/
+
+    public int getTimeSteps() {
+        return timeSteps;
+    }
+
+    public void setTimeSteps(int timeSteps) {
+        this.timeSteps = timeSteps;
+    }
+    public void setTotalFitness(Double totalFitness) {
+        TotalFitness = totalFitness;
+    }
+
+    public Double getTotalFitness() {
+        return TotalFitness;
+    }
 
     public void numberSteps()
     {

@@ -23,4 +23,13 @@ public class State
     public double getA() {
         return a;
     }
+
+    @Override
+    public String toString() {
+        return "State{" +
+                "x=" + x +
+                ", y=" + y +
+                ", a=" + a +
+                '}';
+    }
 }

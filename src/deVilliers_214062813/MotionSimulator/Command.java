@@ -8,4 +8,12 @@ public class Command {
         this.left = left;
         this.right = right;
     }
+
+    public int getLeft() {
+        return left;
+    }
+
+    public int getRight() {
+        return right;
+    }
 }

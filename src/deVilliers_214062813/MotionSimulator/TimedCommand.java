@@ -16,4 +16,6 @@ public class TimedCommand {
     public int getTime() {
         return time;
     }
+
+
 }

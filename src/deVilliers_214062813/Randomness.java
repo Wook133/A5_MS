@@ -70,7 +70,22 @@ public class Randomness {
         cur = cur + 1;
         return (int)cur;
     }
-
+    /**
+     * @param Range [0; Range]
+     * @return  pseudorandom number from a Uniform Distribution within the range
+     */
+    public static Integer UniformPositiveRandomInteger(Double Range)
+    {
+        //double dmax =  1.7320508071499143;
+        double dmax = Math.sqrt(3.0);
+        Random r = new Random();
+        UniformRandomGenerator rnd = new UniformRandomGenerator(new Well19937c(r.nextInt()));
+        double cur = rnd.nextNormalizedDouble();
+        cur = (cur/dmax) * Range;
+        if (cur < 0)
+            cur = cur *-1.0;
+        return (int)cur;
+    }
     /**
      * @param Range [-Range; Range]
      * @return  pseudorandom number from a Normal Distribution within the range
