@@ -45,7 +45,7 @@ public class Controller {
     {
         listChromosomes = new ArrayList<>();
         Randomness r = new Randomness();
-        for (int i = 0; i <= 90; i++)
+        for (int i = 0; i <= 76; i++)
         {
             int left = r.UniformRandomInteger(700.0);
             int right = r.UniformRandomInteger(700.0);

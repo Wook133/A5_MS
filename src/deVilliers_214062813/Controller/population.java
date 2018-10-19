@@ -27,6 +27,8 @@ public class population {
         Generations = generations;
         readCSV rcv = new readCSV();
         targetStates = rcv.readfile(s);
+        VisualFrame vf = new VisualFrame(targetStates);
+
     }
     public void InitializePopulation()
     {
@@ -147,7 +149,7 @@ public class population {
         else
         {
             ArrayList<TimedCommand> listChromosomes = new ArrayList<>();
-            for (int i = 0; i <= 90; i++)
+            for (int i = 0; i <= 76; i++)
             {
 
                 int left = r.UniformRandomInteger(700.0);

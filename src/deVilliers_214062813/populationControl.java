@@ -356,7 +356,7 @@ public class populationControl {
             }
             else
             {
-                tempFitness.add(10000.0);
+                tempFitness.add(1000.0);
             }
         }
         return tempFitness;

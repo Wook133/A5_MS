@@ -25,9 +25,9 @@ public class EvolveCommands {
     int speedMutationFactor = -1;
     double wheelsMutationFactor = 0.5;
     double mutationProbability = 0.3;
-    int populationSize = 50;
+    int populationSize = 400;
 
-    int numberGenerations = 100;
+    int numberGenerations = 10000;
 
     MotionSimulator ms;
 
