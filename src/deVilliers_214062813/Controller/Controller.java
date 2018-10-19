@@ -22,7 +22,9 @@ public class Controller {
     public Controller(State initial, ArrayList<State> targetStates) {
         this.initial = initial;
         listStates.add(initial);
-        initialize();
+        //initialize();
+        //Biasedinitialize();
+        CopyInitialize();
         evaluateFitness(targetStates);
     }
 
@@ -47,12 +49,69 @@ public class Controller {
         Randomness r = new Randomness();
         for (int i = 0; i <= 76; i++)
         {
-            int left = r.UniformRandomInteger(700.0);
-            int right = r.UniformRandomInteger(700.0);
+            int left = r.UniformRandomInteger(250.0);
+            int right = r.UniformRandomInteger(250.0);
             int time = 1;
             System.out.println(left + " : " + right + " : " + time);
             listChromosomes.add(new TimedCommand(new Command(left, right), time));
         }
+        MotionSimulator ms = new MotionSimulator();
+        countTimesteps();
+        listStates = ms.getPath(initial, listChromosomes);
+        System.out.println(listStates.toString());
+    }
+    public void Biasedinitialize()
+    {
+        ArrayList<TimedCommand> listgood = new ArrayList<>();
+        listgood = goodGenes();
+        Randomness r = new Randomness();
+        while (listChromosomes.size() <= 150)
+        {
+            Integer pos = r.UniformPositiveRandomNaturalNumber(listgood.size()-1.0);
+            listChromosomes.add(listgood.get(pos));
+        }
+       /* for (int i = 0; i <= 76; i++)
+        {
+            int left = r.UniformRandomInteger(250.0);
+            int right = r.UniformRandomInteger(250.0);
+            int time = 1;
+            System.out.println(left + " : " + right + " : " + time);
+            listChromosomes.add(new TimedCommand(new Command(left, right), time));
+        }*/
+        MotionSimulator ms = new MotionSimulator();
+        countTimesteps();
+        listStates = ms.getPath(initial, listChromosomes);
+        System.out.println(listStates.toString());
+    }
+    public void CopyInitialize()
+    {
+        ArrayList<TimedCommand> listgood = new ArrayList<>();
+        TimedCommand tc = new TimedCommand(new Command(100,100), 5);
+        listChromosomes.add(tc);
+        for (int i = 0; i <= 9; i++)
+        {
+            tc = new TimedCommand(new Command(100,200), 3);
+            listChromosomes.add(tc);
+        }
+        tc = new TimedCommand(new Command(100,100), 3);
+        listgood.add(tc);
+        for (int i = 0; i <= 9; i++)
+        {
+            tc = new TimedCommand(new Command(200,100), 3);
+            listChromosomes.add(tc);
+        }
+        tc = new TimedCommand(new Command(200,100), 3);
+        listChromosomes.add(tc);
+        tc = new TimedCommand(new Command(200,150), 5);
+        listChromosomes.add(tc);
+       /* for (int i = 0; i <= 76; i++)
+        {
+            int left = r.UniformRandomInteger(250.0);
+            int right = r.UniformRandomInteger(250.0);
+            int time = 1;
+            System.out.println(left + " : " + right + " : " + time);
+            listChromosomes.add(new TimedCommand(new Command(left, right), time));
+        }*/
         MotionSimulator ms = new MotionSimulator();
         countTimesteps();
         listStates = ms.getPath(initial, listChromosomes);
@@ -172,5 +231,23 @@ public class Controller {
         Collections.sort(listTemp);
         double temp = listTemp.get(i);
         return fitness.indexOf(temp);
+    }
+
+    public ArrayList<TimedCommand> goodGenes()
+    {
+        ArrayList<TimedCommand> listCommands = new ArrayList<>();
+        TimedCommand tc = new TimedCommand(new Command(100,100), 1);
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(100,200), 1);
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(100,100), 1);
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(200,100), 1);
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(200,100), 1);
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(200,150), 1);
+        listCommands.add(tc);
+        return listCommands;
     }
 }

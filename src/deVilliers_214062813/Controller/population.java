@@ -87,6 +87,7 @@ public class population {
         {
             temp.add(new TimedCommand(new Command(0,0),1));
         }
+
         Randomness r = new Randomness();
         if (A.listChromosomes.size() == B.listChromosomes.size()) {
             for (int i = 0; i <= A.listChromosomes.size() - 1; i++) {
@@ -96,10 +97,10 @@ public class population {
                     Double curMR = r.UniformPositiveRandomNumber(1.0);
                     if (curMR >= MutationRate)
                     {
-                        int cl = r.normalRandomIntegerN(10.0) * A.listChromosomes.get(i).getC().getLeft();
+                        int cl = r.normalRandomIntegerN(20.0) * A.listChromosomes.get(i).getC().getLeft();
 
                         int cleft = B.listChromosomes.get(i).c.getLeft() + cl;
-                        int cright = B.listChromosomes.get(i).c.getRight() + (r.normalRandomIntegerN(10.0) * A.listChromosomes.get(i).getC().getRight());
+                        int cright = B.listChromosomes.get(i).c.getRight() + (r.normalRandomIntegerN(20.0) * A.listChromosomes.get(i).getC().getRight());
                         if ((cleft >= 700) || (cleft <= -700))
                         {
                             cleft = r.UniformRandomInteger(700.0);
@@ -122,8 +123,8 @@ public class population {
                     Double curMR = r.UniformPositiveRandomNumber(1.0);
                     if (curMR >= MutationRate)
                     {
-                        int cleft = A.listChromosomes.get(i).c.getLeft() + (r.normalRandomIntegerN(10.0) * B.listChromosomes.get(i).getC().getLeft());
-                        int cright = A.listChromosomes.get(i).c.getRight() + (r.normalRandomIntegerN(10.0) * B.listChromosomes.get(i).getC().getRight());
+                        int cleft = A.listChromosomes.get(i).c.getLeft() + (r.normalRandomIntegerN(20.0) * B.listChromosomes.get(i).getC().getLeft());
+                        int cright = A.listChromosomes.get(i).c.getRight() + (r.normalRandomIntegerN(20.0) * B.listChromosomes.get(i).getC().getRight());
                         if ((cleft >= 700) || (cleft <= -700))
                         {
                             cleft = r.UniformRandomInteger(700.0);
@@ -193,7 +194,29 @@ public class population {
         System.out.println(Population.get(0).TotalFitness);
     }
 
-
+    public ArrayList<TimedCommand> goodGenes()
+    {
+        ArrayList<TimedCommand> listCommands = new ArrayList<>();
+        TimedCommand tc = new TimedCommand(new Command(100,100), 5);
+        listCommands.add(tc);
+        for (int i = 0; i <= 9; i++)
+        {
+            tc = new TimedCommand(new Command(100,200), 3);
+            listCommands.add(tc);
+        }
+        tc = new TimedCommand(new Command(100,100), 3);
+        listCommands.add(tc);
+        for (int i = 0; i <= 9; i++)
+        {
+            tc = new TimedCommand(new Command(200,100), 3);
+            listCommands.add(tc);
+        }
+        tc = new TimedCommand(new Command(200,100), 3);
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(200,150), 5);
+        listCommands.add(tc);
+        return listCommands;
+    }
 
 }
 class sortController implements Comparator<Controller>
