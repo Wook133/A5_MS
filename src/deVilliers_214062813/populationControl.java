@@ -34,7 +34,7 @@ public class populationControl {
         this.yend = yend;
         this.angle = angle;
         readCSV rcv = new readCSV();
-        targetStates = rcv.readfile("scaledS.csv");
+        targetStates = rcv.readfile("book1.csv");
     }
 
     public void InitializePopulation()
@@ -277,6 +277,7 @@ public class populationControl {
                 }
             }
 
+
         }
         MotionSimulator ms = new MotionSimulator();
         ArrayList<State> tempStates = new ArrayList<>();
@@ -370,6 +371,8 @@ public class populationControl {
         }
         return tf;
     }
+
+
 
     public void Evolve()
     {

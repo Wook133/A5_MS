@@ -22,9 +22,10 @@ public class Controller {
     public Controller(State initial, ArrayList<State> targetStates) {
         this.initial = initial;
         listStates.add(initial);
+
         //initialize();
-        //Biasedinitialize();
-        CopyInitialize();
+        Biasedinitialize();
+        //CopyInitialize();
         evaluateFitness(targetStates);
     }
 
@@ -65,7 +66,7 @@ public class Controller {
         ArrayList<TimedCommand> listgood = new ArrayList<>();
         listgood = goodGenes();
         Randomness r = new Randomness();
-        while (listChromosomes.size() <= 150)
+        while (listChromosomes.size() <= 74)
         {
             Integer pos = r.UniformPositiveRandomNaturalNumber(listgood.size()-1.0);
             listChromosomes.add(listgood.get(pos));
@@ -248,6 +249,39 @@ public class Controller {
         listCommands.add(tc);
         tc = new TimedCommand(new Command(200,150), 1);
         listCommands.add(tc);
+        tc = new TimedCommand(new Command(0,0), 1);
+
+
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(200,200), 1);
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(100,100), 1);
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(200,200), 1);
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(200,200), 1);
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(300,300), 1);
+
+
+
+
+
+        /*tc = new TimedCommand(new Command(700,200), 1);
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(100,200), 1);
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(0,-700), 1);
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(500,200), 1);
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(600,300), 1);
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(300,600), 1);
+        listCommands.add(tc);*/
+
+
+
         return listCommands;
     }
 }

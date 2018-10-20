@@ -17,12 +17,18 @@ public class population {
     ArrayList<State> targetStates = new ArrayList<>();
     String sfunction;
 
+    Double ShuffleRate;
+    Double ScaleRate;
+    Double ShiftRate;
     Double crossoverRate, MutationRate;
     Integer PopulationSize, Generations;
 
-    public population(Integer populationsize, Double cr, Double mr, Integer generations, String s) {
+    public population(Integer populationsize, Double cr, Double mr, Double sr, Double shift, Double scale, Integer generations, String s) {
         PopulationSize = populationsize;
+        ShuffleRate = sr;
+        ShiftRate = shift;
         crossoverRate = cr;
+        ScaleRate = scale;
         MutationRate = mr;
         Generations = generations;
         readCSV rcv = new readCSV();
@@ -68,7 +74,7 @@ public class population {
         {
             Controller A = Population.get(breedingpairs.get(i).getFirst());
             Controller B = Population.get(breedingpairs.get(i).getSecond());
-            Controller cur = createLife(A, B);
+            Controller cur = createAdvancedLife(A, B);
             cur.evaluateFitness(targetStates);
             temp.add(cur);
             //System.out.println(cur.TotalFitness);
@@ -145,6 +151,120 @@ public class population {
             Controller c = new Controller(targetStates.get(0), temp, targetStates);
             //System.out.println(temp.toString());
            // System.out.println(c.toString());
+            return c ;
+        }
+        else
+        {
+            ArrayList<TimedCommand> listChromosomes = new ArrayList<>();
+            for (int i = 0; i <= 76; i++)
+            {
+
+                int left = r.UniformRandomInteger(700.0);
+                int right = r.UniformRandomInteger(700.0);
+                int time = 1;
+                listChromosomes.add(new TimedCommand(new Command(left, right), time));
+            }
+            Controller c = new Controller(targetStates.get(0), listChromosomes, targetStates);
+            return c;
+        }
+    }
+
+    public Controller createAdvancedLife(Controller A, Controller B)
+    {
+        ArrayList<TimedCommand> temp = new ArrayList<>();
+        for (int j = 0; j <= A.listChromosomes.size()-1; j++)
+        {
+            temp.add(new TimedCommand(new Command(0,0),1));
+        }
+
+        Randomness r = new Randomness();
+        if (A.listChromosomes.size() == B.listChromosomes.size()) {
+            for (int i = 0; i <= A.listChromosomes.size() - 1; i++) {
+                Double curCR = r.UniformPositiveRandomNumber(1.0);
+                if (curCR >= crossoverRate)
+                {
+                    Double curMR = r.UniformPositiveRandomNumber(1.0);
+                    if (curMR >= MutationRate)
+                    {
+                        int cl = r.normalRandomIntegerN(20.0) * A.listChromosomes.get(i).getC().getLeft();
+
+                        int cleft = B.listChromosomes.get(i).c.getLeft() + cl;
+                        int cright = B.listChromosomes.get(i).c.getRight() + (r.normalRandomIntegerN(20.0) * A.listChromosomes.get(i).getC().getRight());
+                        if ((cleft >= 700) || (cleft <= -700))
+                        {
+                            cleft = r.UniformRandomInteger(700.0);
+                        }
+                        //System.out.println("Left "  + cleft);
+                        if ((cright >= 700) || (cright <= -700))
+                        {
+                            cright = r.UniformRandomInteger(700.0);
+                        }
+                        TimedCommand tc = new TimedCommand(new Command(cleft, cright), 1);
+                        temp.set(i, tc);
+                    }
+                    else
+                    {
+                        temp.set(i, B.listChromosomes.get(i));
+                    }
+                }
+                else
+                {
+                    Double curMR = r.UniformPositiveRandomNumber(1.0);
+                    if (curMR >= MutationRate)
+                    {
+                        int cleft = A.listChromosomes.get(i).c.getLeft() + (r.normalRandomIntegerN(20.0) * B.listChromosomes.get(i).getC().getLeft());
+                        int cright = A.listChromosomes.get(i).c.getRight() + (r.normalRandomIntegerN(20.0) * B.listChromosomes.get(i).getC().getRight());
+                        if ((cleft >= 700) || (cleft <= -700))
+                        {
+                            cleft = r.UniformRandomInteger(700.0);
+                        }
+                        if ((cright >= 700) || (cright <= -700))
+                        {
+                            cright = r.UniformRandomInteger(700.0);
+                        }
+                        TimedCommand tc = new TimedCommand(new Command(cleft, cright), 1);
+                        temp.set(i, tc);
+                    }
+                    else
+                    {
+                        temp.set(i, A.listChromosomes.get(i));
+                    }
+                }
+            }
+           /* for (int i = 0; i <= temp.size() - 1; i++)
+            {
+                Double curShift = r.UniformPositiveRandomNumber(1.0);
+                if (curShift >= ShiftRate)
+                {
+                    int ipos = r.UniformPositiveRandomNaturalNumber(temp.size() - 1.0);
+                    TimedCommand tc = temp.remove(i);
+                    temp.add(ipos, tc);
+                }
+            }*/
+            /*for (int i = 0; i <= temp.size() - 1; i++)
+            {
+                Double scaleRate = r.UniformPositiveRandomNumber(1.0);
+                if (scaleRate >= ScaleRate)
+                {
+                    TimedCommand tc = temp.remove(i);
+                    Double left = tc.getC().left * r.NormalRandomNumber(2.0);
+                    Integer l = (int)Math.round(left);
+                    Double right = tc.getC().right * r.NormalRandomNumber(2.0);
+                    Integer ri = (int)Math.round(right);
+                    TimedCommand tnew = new TimedCommand(new Command(l, ri), 1);
+                    temp.add(i, tnew);
+                }
+            }*/
+            if (ShuffleRate >= r.UniformPositiveRandomNumber(1.0))
+            {
+                Collections.shuffle(temp);
+            }
+
+
+
+            Controller c = new Controller(targetStates.get(0), temp, targetStates);
+            //System.out.println(temp.toString());
+            // System.out.println(c.toString());
             return c ;
         }
         else
