@@ -11,6 +11,7 @@ import org.apache.commons.math3.util.Pair;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Random;
 
 public class population {
     ArrayList<Controller> Population = new ArrayList<>();
@@ -20,10 +21,11 @@ public class population {
     Double ShuffleRate;
     Double ScaleRate;
     Double ShiftRate;
+    Double replaceMutation = 0.15;
     Double crossoverRate, MutationRate;
     Integer PopulationSize, Generations;
 
-    public population(Integer populationsize, Double cr, Double mr, Double sr, Double shift, Double scale, Integer generations, String s) {
+    public population(Integer populationsize, Double cr, Double mr, Double sr, Double shift, Double scale, Integer generations, String s, String func) {
         PopulationSize = populationsize;
         ShuffleRate = sr;
         ShiftRate = shift;
@@ -34,6 +36,7 @@ public class population {
         readCSV rcv = new readCSV();
         targetStates = rcv.readfile(s);
         VisualFrame vf = new VisualFrame(targetStates);
+        sfunction = func;
 
     }
     public void InitializePopulation()
@@ -231,17 +234,26 @@ public class population {
                     }
                 }
             }
-           /* for (int i = 0; i <= temp.size() - 1; i++)
+            for (int i = 0; i <= temp.size() - 1; i++)
             {
                 Double curShift = r.UniformPositiveRandomNumber(1.0);
-                if (curShift >= ShiftRate)
+                /*if (curShift >= ShiftRate)
                 {
                     int ipos = r.UniformPositiveRandomNaturalNumber(temp.size() - 1.0);
+                    if ((ipos < 0) || (ipos >= temp.size()))
+                    {
+                        ipos = 0;
+                    }
                     TimedCommand tc = temp.remove(i);
                     temp.add(ipos, tc);
+                }*/
+                if (curShift >= replaceMutation)
+                {
+                    TimedCommand tc = getRandomGoodGene();
+                    temp.set(i, tc);
                 }
-            }*/
-            /*for (int i = 0; i <= temp.size() - 1; i++)
+            }/*
+            for (int i = 0; i <= temp.size() - 1; i++)
             {
                 Double scaleRate = r.UniformPositiveRandomNumber(1.0);
                 if (scaleRate >= ScaleRate)
@@ -270,7 +282,7 @@ public class population {
         else
         {
             ArrayList<TimedCommand> listChromosomes = new ArrayList<>();
-            for (int i = 0; i <= 76; i++)
+            for (int i = 0; i <= targetStates.size()-3; i++)
             {
 
                 int left = r.UniformRandomInteger(700.0);
@@ -296,6 +308,7 @@ public class population {
             System.out.println("Size " + Population.size());
             System.out.println("Min : " + curMin.TotalFitness);
             System.out.println("Max : " + curMax.TotalFitness);
+            System.out.println("Number States : " + curMin.listChromosomes.size());
             ArrayList<Pair<Integer, Integer>> breeders = new ArrayList<>();
             breeders = ElitistSelection();
             ArrayList<Controller> children = new ArrayList<>();
@@ -314,28 +327,85 @@ public class population {
         System.out.println(Population.get(0).TotalFitness);
     }
 
+    public void EvolvePrint(String s)
+    {
+        Collections.sort(Population, new sortController());
+        VisualFrame vf = new VisualFrame(Population.get(0).listStates);
+        int igen = 0;
+        Controller firstMin = Collections.min(Population, new sortController());
+        while (igen <= Generations)
+        {
+            Controller curMin = Collections.min(Population, new sortController());
+            Controller curMax = Collections.max(Population, new sortController());
+            System.out.println("Generation " + igen);
+            if ((igen % 50 ==0)) {
+                System.out.println("Size " + Population.size());
+                System.out.println("Min : " + curMin.TotalFitness + " : " + curMin.fitnessEuclid(targetStates));
+                System.out.println("Max : " + curMax.TotalFitness + " : " + curMax.fitnessEuclid(targetStates));
+            }
+            ArrayList<Pair<Integer, Integer>> breeders = new ArrayList<>();
+            breeders = ElitistSelection();
+            ArrayList<Controller> children = new ArrayList<>();
+            ArrayList<Controller> children2 = new ArrayList<>();
+            children = Breed(breeders);
+            children2 = Breed(breeders);
+            Population = new ArrayList<>();
+            Population.addAll(children);
+            Population.addAll(children2);
+            igen = igen + 1;
+        }
+        //   (Double ybeststart, Double ybestend, String function, String optimizationMethod, Integer popSize, Integer generation, String range, Double crossoverrate, Double mutationrate, Double shufflerate) {
+        try {
+            Collections.sort(Population, new sortController());
+            Double dE1 = firstMin.TotalFitness;
+            Controller lastMin = Collections.min(Population, new sortController());
+            Double dE2 = lastMin.TotalFitness;
+            Experiment e = new Experiment(dE1, dE2, sfunction, "GA", PopulationSize, Generations, "Random Initialize", crossoverRate, MutationRate, ShuffleRate);
+
+            readCSV.writeCsvFile(s, e.print());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+}
+
+
     public ArrayList<TimedCommand> goodGenes()
     {
         ArrayList<TimedCommand> listCommands = new ArrayList<>();
-        TimedCommand tc = new TimedCommand(new Command(100,100), 5);
+        TimedCommand tc = new TimedCommand(new Command(100,100), 1);
         listCommands.add(tc);
-        for (int i = 0; i <= 9; i++)
-        {
-            tc = new TimedCommand(new Command(100,200), 3);
+      /*  for (int i = 0; i <= 9; i++)
+        {*/
+            tc = new TimedCommand(new Command(100,200), 1);
             listCommands.add(tc);
-        }
-        tc = new TimedCommand(new Command(100,100), 3);
+       // }
+        tc = new TimedCommand(new Command(100,100), 1);
         listCommands.add(tc);
-        for (int i = 0; i <= 9; i++)
-        {
-            tc = new TimedCommand(new Command(200,100), 3);
+       /* for (int i = 0; i <= 9; i++)
+        {*/
+            tc = new TimedCommand(new Command(200,100), 1);
             listCommands.add(tc);
-        }
-        tc = new TimedCommand(new Command(200,100), 3);
+        //}
+        tc = new TimedCommand(new Command(200,100), 1);
         listCommands.add(tc);
-        tc = new TimedCommand(new Command(200,150), 5);
+        tc = new TimedCommand(new Command(200,150), 1);
         listCommands.add(tc);
         return listCommands;
+    }
+
+    public TimedCommand getRandomGoodGene()
+    {
+        ArrayList<TimedCommand> gg = new ArrayList<>();
+        gg =goodGenes();
+        Randomness r = new Randomness();
+        Integer i = r.UniformPositiveRandomInteger(gg.size() -0.0) - 1;
+        if ((i < 0) || (i >= gg.size()))
+        {
+            i = 0;
+        }
+        return gg.get(i);
     }
 
 }

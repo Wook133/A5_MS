@@ -1,12 +1,10 @@
 package deVilliers_214062813.Controller;
 
-import deVilliers_214062813.Distance;
-import deVilliers_214062813.EuclideanDistance;
+import deVilliers_214062813.*;
 import deVilliers_214062813.MotionSimulator.Command;
 import deVilliers_214062813.MotionSimulator.MotionSimulator;
 import deVilliers_214062813.MotionSimulator.State;
 import deVilliers_214062813.MotionSimulator.TimedCommand;
-import deVilliers_214062813.Randomness;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,8 +21,8 @@ public class Controller {
         this.initial = initial;
         listStates.add(initial);
 
-        //initialize();
-        Biasedinitialize();
+        initialize();
+        //Biasedinitialize();
         //CopyInitialize();
         evaluateFitness(targetStates);
     }
@@ -48,7 +46,7 @@ public class Controller {
     {
         listChromosomes = new ArrayList<>();
         Randomness r = new Randomness();
-        for (int i = 0; i <= 76; i++)
+        for (int i = 0; i <= 74; i++)
         {
             int left = r.UniformRandomInteger(250.0);
             int right = r.UniformRandomInteger(250.0);
@@ -197,6 +195,27 @@ public class Controller {
             }
         }*/
 
+    }
+    public Double fitnessEuclid(ArrayList<State> targetStates)
+    {
+        fitness = new ArrayList<>();
+        for (int k = 0; k <= targetStates.size() - 1; k++)
+        {
+            if (k <= listStates.size() - 1) {
+                Distance D = new EuclideanDistance(targetStates.get(k).getX(), listStates.get(k).getX(), targetStates.get(k).getY(), listStates.get(k).getY());
+                fitness.add(D.calculateDistance());
+            }
+            else
+            {
+                fitness.add(1000.0);
+            }
+        }
+        Double d = 0.0;
+        for (Double f : fitness)
+        {
+            d = d + f;
+        }
+        return d;
     }
 
     @Override

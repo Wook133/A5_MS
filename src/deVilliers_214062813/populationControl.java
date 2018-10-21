@@ -34,7 +34,7 @@ public class populationControl {
         this.yend = yend;
         this.angle = angle;
         readCSV rcv = new readCSV();
-        targetStates = rcv.readfile("book1.csv");
+        targetStates = rcv.readfile("book2.csv");
     }
 
     public void InitializePopulation()
