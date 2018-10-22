@@ -55,7 +55,7 @@ public class runner {
                 p3.EvolvePrint("ReplaceMutation.csv");
 
         }*/
-        population p3 = new population(200, 0.5, 0.99, 0.0, 0.0, 0.0, 400, "book2.csv", "Euclidean");
+        population p3 = new population(500, 0.5, 0.99, 0.01, 0.0, 0.0, 800, "circle.csv", "Euclidean");
         p3.InitializePopulation();
         p3.Evolve();
     }

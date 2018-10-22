@@ -21,8 +21,8 @@ public class Controller {
         this.initial = initial;
         listStates.add(initial);
 
-        initialize();
-        //Biasedinitialize();
+        //initialize(targetStates);
+        Biasedinitialize(targetStates);
         //CopyInitialize();
         evaluateFitness(targetStates);
     }
@@ -42,11 +42,11 @@ public class Controller {
         evaluateFitness(targetStates);
     }
 
-    public void initialize()
+    public void initialize(ArrayList<State> targetStates)
     {
         listChromosomes = new ArrayList<>();
         Randomness r = new Randomness();
-        for (int i = 0; i <= 74; i++)
+        for (int i = 0; i <= targetStates.size() - 2; i++)
         {
             int left = r.UniformRandomInteger(250.0);
             int right = r.UniformRandomInteger(250.0);
@@ -59,12 +59,12 @@ public class Controller {
         listStates = ms.getPath(initial, listChromosomes);
         System.out.println(listStates.toString());
     }
-    public void Biasedinitialize()
+    public void Biasedinitialize(ArrayList<State> targetStates)
     {
         ArrayList<TimedCommand> listgood = new ArrayList<>();
         listgood = goodGenes();
         Randomness r = new Randomness();
-        while (listChromosomes.size() <= 74)
+        while (listChromosomes.size() <= targetStates.size() - 2)
         {
             Integer pos = r.UniformPositiveRandomNaturalNumber(listgood.size()-1.0);
             listChromosomes.add(listgood.get(pos));
@@ -264,26 +264,23 @@ public class Controller {
         listCommands.add(tc);
         tc = new TimedCommand(new Command(200,100), 1);
         listCommands.add(tc);
-        tc = new TimedCommand(new Command(200,100), 1);
-        listCommands.add(tc);
         tc = new TimedCommand(new Command(200,150), 1);
         listCommands.add(tc);
         tc = new TimedCommand(new Command(0,0), 1);
-
-
-        listCommands.add(tc);
-        tc = new TimedCommand(new Command(200,200), 1);
         listCommands.add(tc);
         tc = new TimedCommand(new Command(100,100), 1);
         listCommands.add(tc);
         tc = new TimedCommand(new Command(200,200), 1);
         listCommands.add(tc);
-        tc = new TimedCommand(new Command(200,200), 1);
-        listCommands.add(tc);
         tc = new TimedCommand(new Command(300,300), 1);
-
-
-
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(700,600), 1);
+        listCommands.add(tc);
+        /*tc = new TimedCommand(new Command(600,400), 14);
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(400,400), 10);
+        listCommands.add(tc);
+        tc = new TimedCommand(new Command(700,500), 15);*/
 
 
         /*tc = new TimedCommand(new Command(700,200), 1);

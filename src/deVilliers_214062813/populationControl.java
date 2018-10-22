@@ -34,7 +34,7 @@ public class populationControl {
         this.yend = yend;
         this.angle = angle;
         readCSV rcv = new readCSV();
-        targetStates = rcv.readfile("book2.csv");
+        targetStates = rcv.readfile("line.csv");
     }
 
     public void InitializePopulation()
@@ -204,6 +204,20 @@ public class populationControl {
         return pcur;
     }
 
+    public Triple<Agent, ArrayList<State>, ArrayList<Double>> createClone(Agent A)
+    {
+        Agent temp = new Agent();
+        temp = A;
+        MotionSimulator ms = new MotionSimulator();
+        ArrayList<State> tempStates = new ArrayList<>();
+        tempStates = ms.getPath(new State(xstart,ystart, angle), temp.getListChromosomes());
+        ArrayList<Double> tempFitness = calcIndividualFitness(tempStates);
+        Double tf = calcTotalFitness(tempFitness);
+        temp.setTotalFitness(tf);
+        Triple<Agent, ArrayList<State>, ArrayList<Double>> pcur = Triple.of(temp, tempStates, tempFitness);
+        return pcur;
+    }
+
     public Triple<Agent, ArrayList<State>, ArrayList<Double>> createNewAgent(Agent A, Agent B, ArrayList<Double> fB) {
         Randomness r = new Randomness();
         Agent temp = new Agent();
@@ -303,7 +317,9 @@ public class populationControl {
         c.setTotalFitness(tf);
         Triple<Agent, ArrayList<State>, ArrayList<Double>> pcur = Triple.of(c, tempStates, tempFitness);
         temp.add(pcur);
-        for (int i = 1; i <= breedingpairs.size() - 1; i++)
+        Triple<Agent, ArrayList<State>, ArrayList<Double>> q = createClone(Collections.min(population, new sortTripleGA()).getLeft());
+        temp.add(q);
+        for (int i = 2; i <= breedingpairs.size() - 1; i++)
         {
             Agent A = population.get(breedingpairs.get(i).getFirst()).getLeft();
             Agent B = population.get(breedingpairs.get(i).getSecond()).getLeft();
@@ -387,29 +403,25 @@ public class populationControl {
             System.out.println("Generation " + igen);
             System.out.println("Size " + population.size());
             System.out.println("Min : " + curMin.getLeft().getTotalFitness());
-           // System.out.println("Max : " + curMax.toString());
             ArrayList<Pair<Integer, Integer>> breeders = new ArrayList<>();
             breeders = ElitistSelection();
             ArrayList<Triple<Agent, ArrayList<State>, ArrayList<Double>>>children = new ArrayList<>();
             ArrayList<Triple<Agent, ArrayList<State>, ArrayList<Double>>> children2 = new ArrayList<>();
             children = Breed(breeders);
-            children2 = Breed(breeders);
-           /* ArrayList<Triple<Agent, ArrayList<State>, ArrayList<Double>>>children3 = new ArrayList<>();
-            ArrayList<Triple<Agent, ArrayList<State>, ArrayList<Double>>> children4 = new ArrayList<>();*/
-            children = Breed(breeders);
             children2 = BreedOther(breeders);
             population = new ArrayList<>();
             population.addAll(children);
             population.addAll(children2);
-          /*  population.addAll(children3);
-            population.addAll(children4);*/
-            //breeders = selectBest10Percent();
-            //BreedToPop(breeders);
+
             igen = igen + 1;
         }
         Collections.sort(population, new sortTripleGA());
         vf = new VisualFrame(population.get(0).getMiddle());
         System.out.println(population.get(0).getLeft().TotalFitness);
+        for (State s : population.get(0).getMiddle())
+        {
+            System.out.println(s.getX() + "; " + s.getY() + "; " +s.getA());
+        }
     }
 
 

@@ -190,7 +190,6 @@ public class population {
                     if (curMR >= MutationRate)
                     {
                         int cl = r.normalRandomIntegerN(20.0) * A.listChromosomes.get(i).getC().getLeft();
-
                         int cleft = B.listChromosomes.get(i).c.getLeft() + cl;
                         int cright = B.listChromosomes.get(i).c.getRight() + (r.normalRandomIntegerN(20.0) * A.listChromosomes.get(i).getC().getRight());
                         if ((cleft >= 700) || (cleft <= -700))
@@ -234,7 +233,7 @@ public class population {
                     }
                 }
             }
-            for (int i = 0; i <= temp.size() - 1; i++)
+            /*for (int i = 0; i <= temp.size() - 1; i++)
             {
                 Double curShift = r.UniformPositiveRandomNumber(1.0);
                 /*if (curShift >= ShiftRate)
@@ -247,7 +246,7 @@ public class population {
                     TimedCommand tc = temp.remove(i);
                     temp.add(ipos, tc);
                 }*/
-                if (curShift >= replaceMutation)
+               /* if (curShift >= replaceMutation)
                 {
                     TimedCommand tc = getRandomGoodGene();
                     temp.set(i, tc);
@@ -325,6 +324,10 @@ public class population {
         Collections.sort(Population, new sortController());
         vf = new VisualFrame(Population.get(0).listStates);
         System.out.println(Population.get(0).TotalFitness);
+        for (State s : Population.get(0).listStates)
+        {
+            System.out.println(s.getX() + "; " + s.getY() + "; " +s.getA());
+        }
     }
 
     public void EvolvePrint(String s)

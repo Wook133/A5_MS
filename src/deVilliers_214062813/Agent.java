@@ -83,8 +83,8 @@ public class Agent {
         while ((timeSteps > 100) && (listChromosomes.size() > 1))
         {
             Randomness r = new Randomness();
-            double size = (listChromosomes.size()*1.0) - 1.0;
-            int posremove = r.UniformPositiveRandomNaturalNumber(size);
+            double size = (listChromosomes.size()*1.0);
+            int posremove = r.UniformPositiveRandomNaturalNumber(size)- 1;
             listChromosomes.remove(posremove);
             numberSteps();
         }
